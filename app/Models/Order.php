@@ -14,10 +14,22 @@ class Order extends Model
         'customer_phone',
         'product_id',
         'quantity',
+        'subtotal',
+        'discount_amount',
+        'promo_code_id',
+        'delivery_fee',
         'total_amount',
+        'delivery_option',
         'shipping_address',
         'tracking_number',
         'status',
+    ];
+
+    protected $casts = [
+        'subtotal' => 'decimal:2',
+        'discount_amount' => 'decimal:2',
+        'delivery_fee' => 'decimal:2',
+        'total_amount' => 'decimal:2',
     ];
 
     protected static function booted()
@@ -45,6 +57,27 @@ class Order extends Model
     public function payment()
     {
         return $this->hasOne(Payment::class);
+    }
+
+    public function promoCode()
+    {
+        return $this->belongsTo(PromoCode::class);
+    }
+
+        // Helper methods
+    public function isTakeaway()
+    {
+        return $this->delivery_option === 'takeaway';
+    }
+
+    public function hasPromoCode()
+    {
+        return !is_null($this->promo_code_id);
+    }
+
+    public function getPromoCodeText()
+    {
+        return $this->promoCode ? $this->promoCode->code : '-';
     }
 
 

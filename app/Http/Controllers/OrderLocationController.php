@@ -8,6 +8,10 @@ class OrderLocationController extends Controller
 {
     public function index()
     {
-        return "Halaman lokasi pesanan";
+        $lat = -7.814729;
+        $lng = 112.108366;
+
+        return view('lokasi', compact('lat', 'lng'));
     }
+
 }

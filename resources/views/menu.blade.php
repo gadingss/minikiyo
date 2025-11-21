@@ -1,71 +1,6 @@
-<!-- <!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu - Minikiyo Wonton East Java</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .hero-bg {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.9) 0%, rgba(217, 119, 6, 0.9) 100%), 
-                        url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 0h100v100H0z" fill="%23f59e0b"/%3E%3C/svg%3E');
-            background-size: cover;
-            background-position: center;
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-        .category-active {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-        .category-inactive {
-            background: rgba(245, 158, 11, 0.1);
-            color: #d97706;
-        }
-        .rating-stars {
-            color: #fbbf24;
-        }
-        .discount-badge {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        .floating-cart {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-        .modal {
-            display: none;
-        }
-        .modal.show {
-            display: flex;
-        }
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .quantity-input {
-            width: 60px;
-        }
-    </style>
-</head>
-<body class="bg-gray-50"> -->
-@extends('layouts.navigation')
+@extends('layouts.app')
 @section('content')
+
     <!-- Hero Section -->
     <section class="hero-bg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -90,11 +25,33 @@
                         <i class="fas fa-percentage"></i>
                         <span>15% - Hemat hingga 15.000</span>
                     </div>
+
+                    <!-- Tombol Ambil Lokasi -->
+                    <button 
+                        onclick="getLocationHero()" 
+                        class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full flex items-center space-x-2 shadow"
+                    >
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Gunakan Lokasi Saya</span>
+                    </button>
+
+                    <!-- Tempat menampilkan alamat -->
+                    <div id="alamatBox" class="mt-4 text-gray-900 font-semibold">
+                        {{ session('user_address') }}
+                    </div>
+
+
+
+                    <!-- Hasil Alamat -->
+                    <p id="user-address" class="mt-4 text-white text-sm bg-black bg-opacity-30 p-3 rounded-lg hidden">
+                        Mendeteksi lokasi...
+                    </p>
+
                 </div>
 
                 <!-- Right Content - Product Image with Rating -->
                 <div class="relative">
-                    <img src="{{ asset('images/dimsum_mentai.jpg') }}" alt="Dimsum Mentai" class="w-full h-48 object-cover">
+                    <img src="{{ asset('images/dimsum_mentai.jpg') }}" alt="Dimsum Mentai" class="w-full h-48 object-cover" loading="lazy">
                     
                     <!-- Rating Badge -->
                     <div class="absolute top-4 right-4 bg-white rounded-lg p-3 shadow-lg">
@@ -141,31 +98,31 @@
     </section>
 
     <!-- Promotional Banners -->
-    <section class="py-8 bg-gray-50">
+    <!-- <section class="py-8 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-3 gap-6">
                 <!-- First Order Discount -->
-                <div class="relative bg-gradient-to-r from-purple-600 to-purple-800 rounded-2xl p-6 text-white overflow-hidden">
+                <!-- <div class="relative bg-gradient-to-r from-purple-600 to-purple-800 rounded-2xl p-6 text-white overflow-hidden">
                     <div class="discount-badge absolute top-4 right-4 text-white px-3 py-1 rounded-full text-sm font-bold">-40%</div>
                     <h3 class="text-xl font-bold mb-2">First Order Discount</h3>
                     <p class="text-sm opacity-90">Dapatkan diskon hingga 40% untuk pesanan pertama</p>
                     <button class="mt-4 bg-white text-purple-600 px-4 py-2 rounded-lg font-medium">
                         <i class="fas fa-plus mr-2"></i>Claim
                     </button>
-                </div>
+                </div> -->
 
                 <!-- Vegan Discount -->
-                <div class="relative bg-gradient-to-r from-green-500 to-green-700 rounded-2xl p-6 text-white overflow-hidden">
+                <!-- <div class="relative bg-gradient-to-r from-green-500 to-green-700 rounded-2xl p-6 text-white overflow-hidden">
                     <div class="discount-badge absolute top-4 right-4 text-white px-3 py-1 rounded-full text-sm font-bold">-25%</div>
                     <h3 class="text-xl font-bold mb-2">Vegan Discount</h3>
                     <p class="text-sm opacity-90">Menu vegetarian dengan diskon spesial</p>
                     <button class="mt-4 bg-white text-green-600 px-4 py-2 rounded-lg font-medium">
                         <i class="fas fa-plus mr-2"></i>Claim
                     </button>
-                </div>
+                </div> -->
 
                 <!-- Free Ice Cream -->
-                <div class="relative bg-gradient-to-r from-blue-500 to-blue-700 rounded-2xl p-6 text-white overflow-hidden">
+                <!-- <div class="relative bg-gradient-to-r from-blue-500 to-blue-700 rounded-2xl p-6 text-white overflow-hidden">
                     <div class="discount-badge absolute top-4 right-4 text-white px-3 py-1 rounded-full text-sm font-bold">200%</div>
                     <h3 class="text-xl font-bold mb-2">Free Ice Cream Offer</h3>
                     <p class="text-sm opacity-90">Es krim gratis untuk setiap pembelian</p>
@@ -175,10 +132,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --> -->
 
-        <!-- Menu Items (auto loop $menuData) -->
-    <main class="py-8 bg-white">
+    <!-- <main class="py-8 bg-white" wire:ignore>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @foreach($menuData as $category => $items)
                 <section id="{{ $category }}-section" class="menu-section mb-12">
@@ -187,266 +143,688 @@
                 </section>
             @endforeach
         </div>
-    </main>
+    </main> -->
+
 
     <!-- Toast Notification -->
     <div id="toast"
         class="hidden bg-orange-500 text-white px-4 py-3 rounded-lg shadow-lg transition-all duration-300">
     </div>
+{{-- Livewire Menu List (Daftar Produk) --}}
+<livewire:menu-list :menuData="$menuData" />
 
+{{-- Livewire Sidebar Cart --}}
+<livewire:menu-cart-sidebar />
+<script>
+async function getLocationHero() {
+    const box = document.getElementById("alamatBox");
 
+    if (!navigator.geolocation) {
+        box.innerText = "Browser Anda tidak mendukung GPS.";
+        return;
+    }
 
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
 
+        box.innerText = "Mengambil alamat...";
 
-
-
-    <!-- Cart Modal
-    <div id="cart-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 justify-center items-center">
-        <div class="bg-white rounded-2xl p-6 w-96 relative">
-            <button onclick="hideCartModal()" class="absolute top-3 right-3 text-gray-500">&times;</button>
-            <h2 class="text-xl font-bold mb-4">Keranjang Belanja</h2>
-            <div id="cart-items" class="space-y-2 mb-4"></div>
-            <div class="flex justify-between font-bold text-lg">
-                <span>Total:</span>
-                <span id="cart-modal-total">Rp 0</span>
-            </div>
-            <button onclick="proceedToCheckout()" 
-                    class="w-full mt-4 bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600">
-                Checkout
-            </button>
-        </div>
-    </div> -->
-
-    <!-- Floating Cart Button -->
-<!-- Floating Cart Icon -->
-    <div id="floating-cart" 
-        onclick="showCartModal()" 
-        class="fixed bottom-6 right-6 bg-orange-500 text-white rounded-full p-4 shadow-lg cursor-pointer">
-        <i class="fas fa-shopping-cart"></i>
-        <span id="floating-cart-count" class="ml-2">0</span>
-    </div>
-    <!-- <pre>{{ json_encode($menuData, JSON_PRETTY_PRINT) }}</pre> -->
-
-    <script>
-        const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
-        const menuData = @json($menuData); // object by category
-        let cart = [];
-        let currentCategory = 'all';
-
-        document.addEventListener('DOMContentLoaded', function() {
-            loadMenuItems();
+        // Reverse Geocode
+        const res = await fetch("/reverse-geocode", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({ lat, lon })
         });
 
-        // Load menu items per kategori
-        function loadMenuItems(category = 'all', searchTerm = '') {
-            const categories = category === 'all' ? Object.keys(menuData) : [category];
-            categories.forEach(cat => {
-                const items = menuData[cat] || [];
-                const filteredItems = searchTerm
-                    ? items.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
-                    : items;
+        const data = await res.json();
+        const alamat = data.display_name ?? "Alamat tidak ditemukan";
 
-                const container = document.getElementById(`${cat}-items`);
-                if (container) {
-                    container.innerHTML = filteredItems.map(item => `
-                        <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden p-4">
+        // Tampilkan
+        box.innerText = alamat;
+
+        // Simpan ke session untuk cart
+        await fetch("/save-location", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({ address: alamat })
+        });
+
+    }, (err) => {
+        box.innerText = "Gagal mengambil lokasi: " + err.message;
+    });
+}
+</script>
+
+
+
+
+
+
+<!-- <script>
+    const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+    const menuData = @json($menuData);
+    let currentCategory = 'all';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadMenuItems();
+        updateCartCount();
+        initializeEventListeners();
+    });
+
+    // ========================
+    // 🔹 Initialize Event Listeners
+    // ========================
+    function initializeEventListeners() {
+        // Search input
+        const searchInput = document.getElementById('search-menu');
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') searchMenu();
+            });
+        }
+
+        // Delivery options
+        const deliveryOptions = document.querySelectorAll('input[name="delivery"]');
+        deliveryOptions.forEach(option => {
+            option.addEventListener('change', function() {
+                updateDeliveryOption(this.value);
+            });
+        });
+
+        // Promo code input
+        const promoInput = document.getElementById('promo-code-input');
+        if (promoInput) {
+            promoInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') applyPromoCode();
+            });
+        }
+
+        // Livewire events
+        if (typeof Livewire !== 'undefined') {
+            // Event ketika Livewire update cart summary
+            Livewire.on('cartSummaryUpdated', (event) => {
+                console.log('Cart summary updated from Livewire:', event);
+                updateCartUI(
+                    event.summary.subtotal,
+                    event.summary.discount,
+                    event.summary.delivery_fee,
+                    event.summary.total,
+                    event.summary.promo_code
+                );
+            });
+
+            // Event ketika cart dibuka
+            Livewire.on('cartOpened', () => {
+                adjustLayoutForCart(true);
+            });
+            
+            Livewire.on('cartClosed', () => {
+                adjustLayoutForCart(false);
+            });
+
+            Livewire.on('updateCartBadge', (event) => {
+                updateBadges(event.count);
+            });
+        }
+    }
+
+    // ========================
+    // 🔹 Adjust layout when cart opens/closes
+    // ========================
+    function adjustLayoutForCart(open) {
+        const mainContainer = document.getElementById('main-container');
+        const menuContainer = document.getElementById('menu-container');
+        const mainGrid = document.getElementById('main-grid');
+        
+        if (open) {
+            // Saat cart terbuka, geser seluruh layout ke kiri
+            if (mainContainer) {
+                mainContainer.style.transform = 'translateX(-96px)';
+                mainContainer.style.transition = 'transform 0.3s ease';
+            }
+            
+            // Menu jadi 3/4 width
+            if (menuContainer && mainGrid) {
+                menuContainer.className = 'lg:col-span-3 transition-all duration-300';
+                mainGrid.className = 'grid grid-cols-1 lg:grid-cols-4 gap-8 transition-all duration-300';
+            }
+        } else {
+            // Saat cart tertutup, kembalikan ke posisi semula
+            if (mainContainer) {
+                mainContainer.style.transform = 'translateX(0)';
+            }
+            
+            // Menu full width
+            if (menuContainer && mainGrid) {
+                menuContainer.className = 'lg:col-span-4 transition-all duration-300';
+                mainGrid.className = 'grid grid-cols-1 lg:grid-cols-1 gap-8 transition-all duration-300';
+            }
+        }
+    }
+
+    // ========================
+    // 🔹 Load menu items
+    // ========================
+    function loadMenuItems(category = 'all', searchTerm = '') {
+        const categories = category === 'all' ? Object.keys(menuData) : [category];
+        categories.forEach(cat => {
+            const items = menuData[cat] || [];
+            const filteredItems = searchTerm
+                ? items.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                : items;
+
+            const container = document.getElementById(`${cat}-items`);
+            if (container) {
+                container.innerHTML = filteredItems.map(item => {
+                    const isSoldOut = item.is_active === 0;
+
+                    return `
+                        <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden p-4 ${isSoldOut ? 'opacity-50 pointer-events-none' : ''}">
                             <img src="${item.image}" alt="${item.name}" class="w-full h-40 object-cover rounded-lg mb-4">
+
+                            ${isSoldOut ? `
+                                <div class="absolute top-2 left-2 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                                    SOLD OUT
+                                </div>
+                            ` : ''}
+
                             <h3 class="font-bold text-lg text-gray-900 mb-2">${item.name}</h3>
                             <p class="text-gray-600 text-sm mb-3">${item.description ?? ''}</p>
+
                             <div class="flex items-center justify-between">
-                                <span class="text-xl font-bold text-orange-500">Rp ${(item.price).toLocaleString('id-ID')}</span>
-                                <button onclick="addToCart(${item.id}, '${cat}')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full">
-                                    <i class="fas fa-plus"></i> Tambah
-                                </button>
+                                <span class="text-xl font-bold text-orange-500">
+                                    Rp ${(item.price).toLocaleString('id-ID')}
+                                </span>
+
+                                ${
+                                    isSoldOut
+                                    ? `<button class="bg-gray-400 text-white px-4 py-2 rounded-full cursor-not-allowed">Tidak Tersedia</button>`
+                                    : `<button onclick="addToCart(${item.id}, '${cat}')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full"><i class="fas fa-plus"></i> Tambah</button>`
+                                }
                             </div>
                         </div>
-                    `).join('');
-                }
-
-                const section = document.getElementById(`${cat}-section`);
-                if (section) {
-                    section.style.display = (category === 'all' || category === cat) ? 'block' : 'none';
-                }
-            });
-        }
-
-        // Filter kategori
-        function filterCategory(category, event) {
-            currentCategory = category;
-            document.querySelectorAll('.category-tab').forEach(tab => {
-                tab.classList.remove('category-active');
-                tab.classList.add('category-inactive');
-            });
-            if (event) {
-                event.target.classList.add('category-active');
-            }
-            loadMenuItems(category);
-        }
-
-        // Pencarian menu
-        function searchMenu() {
-            const searchTerm = document.getElementById('search-menu').value;
-            loadMenuItems(currentCategory, searchTerm);
-        }
-
-        // ✅ Tambah ke keranjang
-        function addToCart(id, category) {
-            if (!isLoggedIn) {
-                showToast('Silakan login terlebih dahulu untuk menambah pesanan.', 'bg-red-500');
-                setTimeout(() => {
-                    window.location.href = '{{ route('login') }}';
-                }, 1500);
-                return;
-            }
-            const item = Object.values(menuData)
-                .flat()
-                .find(m => m.id === id);
-
-            if (!item) {
-                console.error('Item tidak ditemukan:', id);
-                return;
+                    `;
+                }).join('');
             }
 
-            fetch('{{ route('cart.add') }}', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    product_id: item.id,
-                    name: item.name,
-                    price: item.price,
-                    quantity: 1
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                showToast(data.message);
-                if (data.cart_count !== undefined) {
-                    document.getElementById('cart-count').innerText = data.cart_count;
-                    document.getElementById('floating-cart-count').innerText = data.cart_count;
-                }
-            })
-            .catch(err => console.error(err));
-        }
-
-        // ✅ Checkout
-        function proceedToCheckout() {
-            fetch('{{ route('cart.checkout') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ cart })
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert(data.message);
-                if (data.success) {
-                    cart = [];
-                    document.getElementById('cart-count').innerText = 0;
-                    document.getElementById('floating-cart-count').innerText = 0;
-                    document.getElementById('cart-modal-total').innerText = 'Rp 0';
-                    hideCartModal();
-                }
-            })
-            .catch(err => console.error(err));
-        }
-
-        // ✅ Tampilkan modal keranjang
-        function showCartModal() {
-            fetch('{{ route('cart.list') }}')
-                .then(res => res.json())
-                .then(data => {
-                    const cartItemsContainer = document.getElementById('cart-items');
-                    const totalEl = document.getElementById('cart-modal-total');
-                    
-                    cartItemsContainer.innerHTML = Object.values(data.cart).map(item => `
-                        <div class="flex justify-between items-center border-b py-2">
-                            <div>
-                                <p class="font-semibold">${item.name}</p>
-                                <p class="text-sm text-gray-500">Qty: ${item.quantity}</p>
-                            </div>
-                            <div class="text-right">
-                                <p>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</p>
-                            </div>
-                        </div>
-                    `).join('');
-
-                    totalEl.innerText = 'Rp ' + data.total.toLocaleString('id-ID');
-
-                    const modal = document.getElementById('cart-modal');
-                    modal.classList.remove('hidden');
-                    modal.classList.add('flex');
-                })
-                .catch(err => console.error(err));
-        }
-
-        // ✅ Tutup modal
-        function hideCartModal() {
-            const modal = document.getElementById('cart-modal');
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
-        }
-
-        // ✅ Render cart lokal (jika tanpa backend)
-        function renderCartItems() {
-            const container = document.getElementById('cart-items');
-            container.innerHTML = '';
-            let total = 0;
-
-            cart.forEach(item => {
-                total += item.price * item.quantity;
-                container.innerHTML += `
-                    <div class="flex justify-between items-center">
-                        <span>${item.name} x ${item.quantity}</span>
-                        <span>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</span>
-                    </div>
-                `;
-            });
-
-            document.getElementById('cart-modal-total').innerText = `Rp ${total.toLocaleString('id-ID')}`;
-        }
-
-        function showToast(message, color = 'bg-orange-500') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `fixed top-5 right-5 ${color} text-white px-4 py-3 rounded-lg shadow-lg transition-all duration-300 fade-in`;
-            toast.classList.remove('hidden');
-            toast.style.opacity = 1;
-
-            setTimeout(() => {
-                toast.style.opacity = 0;
-                setTimeout(() => toast.classList.add('hidden'), 300);
-            }, 2000);
-        }
-
-        function updateCartCount() {
-            fetch('{{ route('cart.list') }}')
-                .then(res => res.json())
-                .then(data => {
-                    // pastikan controller list() mengembalikan array cart
-                    const count = data.length || 0;
-                    document.getElementById('floating-cart-count').innerText = count;
-
-                    const cartCount = document.getElementById('cart-count');
-                    if (cartCount) cartCount.innerText = count;
-                })
-                .catch(err => console.error('Gagal ambil cart list:', err));
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            loadMenuItems();       // sudah ada
-            updateCartCount();     // tambahkan ini ✅
+            const section = document.getElementById(`${cat}-section`);
+            if (section) {
+                section.style.display = (category === 'all' || category === cat) ? 'block' : 'none';
+            }
         });
+    }
+
+    // ========================
+    // 🔹 Filter category
+    // ========================
+    function filterCategory(category) {
+        currentCategory = category;
+        loadMenuItems(category);
         
+        // Update active state
+        document.querySelectorAll('.category-tab').forEach(btn => {
+            btn.classList.remove('category-active');
+            btn.classList.add('category-inactive');
+        });
+        event.target.classList.remove('category-inactive');
+        event.target.classList.add('category-active');
+    }
+
+    // ========================
+    // 🔹 Search menu
+    // ========================
+    function searchMenu() {
+        const searchTerm = document.getElementById('search-menu').value;
+        loadMenuItems(currentCategory, searchTerm);
+    }
+
+    // ========================
+    // 🔹 Tambah ke keranjang
+    // ========================
+    function addToCart(id, category) {
+        if (!isLoggedIn) {
+            showToast('Silakan login terlebih dahulu untuk menambah pesanan.', 'bg-red-500');
+            setTimeout(() => window.location.href = '{{ route('login') }}', 1500);
+            return;
+        }
+
+        const item = Object.values(menuData).flat().find(m => m.id === id);
+        if (!item) {
+            console.error('Item tidak ditemukan:', id);
+            return;
+        }
+
+        fetch('{{ route('cart.add') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                product_id: item.id,
+                name: item.name,
+                price: item.price,
+                quantity: 1
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.message || 'Berhasil ditambahkan ke keranjang');
+                updateBadges(data.cart_count || 0);
+                updateCartSummary();
+                
+                // Trigger Livewire untuk buka sidebar
+                if (typeof Livewire !== 'undefined') {
+                    Livewire.dispatch('cartUpdated');
+                    Livewire.dispatch('showCartSidebar');
+                }
+            } else {
+                showToast(data.message || 'Gagal menambah ke keranjang', 'bg-red-500');
+            }
+        })
+        .catch(err => {
+            console.error('Error addToCart:', err);
+            showToast('Terjadi kesalahan saat menambahkan ke keranjang', 'bg-red-500');
+        });
+    }
+
+    // ========================
+    // 🔹 Update cart summary
+    // ========================
+    function updateCartSummary() {
+        fetch('{{ route('cart.list') }}')
+            .then(res => res.json())
+            .then(data => {
+                const subtotal = data.cart_total || 0;
+                const discount = data.discount_amount || 0;
+                const deliveryFee = data.delivery_fee || 0;
+                const total = data.total_amount || 0;
+                const promoCode = data.promo_code || null;
+
+                // Update UI elements
+                updateCartUI(subtotal, discount, deliveryFee, total, promoCode);
+                
+                // Update delivery info
+                updateDeliveryInfo(subtotal, deliveryFee);
+            })
+            .catch(err => console.error('Error update summary:', err));
+    }
+
+    // ========================
+    // 🔹 Update cart UI
+    // ========================
+    function updateCartUI(subtotal, discount, deliveryFee, total, promoCode) {
+        console.log('Updating UI with:', { subtotal, total });
+        
+        const elements = {
+            subtotal: document.getElementById('static-cart-subtotal'),
+            discount: document.getElementById('static-cart-discount'),
+            discountRow: document.getElementById('discount-row'),
+            delivery: document.getElementById('static-cart-delivery'),
+            total: document.getElementById('static-cart-total')
+        };
+
+        // Only update if elements exist and values are valid
+        if (elements.subtotal && !isNaN(subtotal)) {
+            elements.subtotal.textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+        }
+        
+        if (elements.discount && elements.discountRow) {
+            if (discount > 0) {
+                elements.discount.textContent = `-Rp ${discount.toLocaleString('id-ID')}`;
+                elements.discountRow.classList.remove('hidden');
+            } else {
+                elements.discountRow.classList.add('hidden');
+            }
+        }
+        
+        if (elements.delivery && !isNaN(deliveryFee)) {
+            elements.delivery.textContent = `Rp ${deliveryFee.toLocaleString('id-ID')}`;
+        }
+        
+        if (elements.total && !isNaN(total)) {
+            elements.total.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+    }
+
+    // ========================
+    // 🔹 Apply promo code
+    // ========================
+    function applyPromoCode() {
+        const promoCode = document.getElementById('promo-code-input')?.value.trim();
+        
+        if (!promoCode) {
+            showToast('Masukkan kode promo', 'bg-yellow-500');
+            return;
+        }
+
+        fetch('{{ route('cart.apply-promo') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                promo_code: promoCode
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.message, 'bg-green-500');
+                updateCartSummary();
+            } else {
+                showToast(data.message, 'bg-red-500');
+            }
+        })
+        .catch(err => {
+            console.error('Error apply promo:', err);
+            showToast('Terjadi kesalahan', 'bg-red-500');
+        });
+    }
+
+    // ========================
+    // 🔹 Remove promo code
+    // ========================
+    function removePromoCode() {
+        fetch('{{ route('cart.remove-promo') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.message, 'bg-blue-500');
+                updateCartSummary();
+            }
+        })
+        .catch(err => {
+            console.error('Error remove promo:', err);
+            showToast('Terjadi kesalahan', 'bg-red-500');
+        });
+    }
+
+    // ========================
+    // 🔹 Update promo code UI
+    // ========================
+    function updatePromoCodeUI(promoCode, discountAmount) {
+        const promoSection = document.getElementById('promo-section');
+        if (promoSection) {
+            promoSection.innerHTML = `
+                <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                    <div>
+                        <p class="text-sm font-medium text-green-800">Kode Promo: ${promoCode}</p>
+                        <p class="text-xs text-green-600">Diskon: Rp ${discountAmount.toLocaleString('id-ID')}</p>
+                    </div>
+                    <button 
+                        onclick="removePromoCode()" 
+                        class="text-red-500 hover:text-red-700"
+                    >
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+        }
+    }
+
+    // ========================
+    // 🔹 Reset promo code UI
+    // ========================
+    function resetPromoCodeUI() {
+        const promoSection = document.getElementById('promo-section');
+        if (promoSection) {
+            promoSection.innerHTML = `
+                <div class="flex space-x-2">
+                    <input 
+                        type="text" 
+                        id="promo-code-input"
+                        placeholder="Masukkan kode promo" 
+                        class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                    >
+                    <button 
+                        onclick="applyPromoCode()"
+                        class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm"
+                    >
+                        Apply
+                    </button>
+                </div>
+            `;
+
+            // Re-attach event listener
+            const promoInput = document.getElementById('promo-code-input');
+            if (promoInput) {
+                promoInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') applyPromoCode();
+                });
+            }
+        }
+    }
+
+    // ========================
+    // 🔹 Update delivery option
+    // ========================
+    function updateDeliveryOption(option) {
+        fetch('{{ route('cart.update-delivery') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                delivery_option: option
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                updateCartSummary();
+            }
+        })
+        .catch(err => console.error('Error update delivery:', err));
+    }
+
+    // ========================
+    // 🔹 Update delivery info
+    // ========================
+    function updateDeliveryInfo(subtotal, deliveryFee) {
+        const deliveryInfo = document.getElementById('delivery-info');
+        if (!deliveryInfo) return;
+
+        const deliveryOption = document.querySelector('input[name="delivery"]:checked')?.value;
+        
+        if (deliveryOption === 'takeaway') {
+            deliveryInfo.innerHTML = '<p class="text-green-600 text-sm">✓ Ambil di toko - Gratis</p>';
+        } else if (deliveryFee === 0 && subtotal > 0) {
+            deliveryInfo.innerHTML = '<p class="text-green-600 text-sm">✓ Gratis ongkir (order ≥ Rp 35.000)</p>';
+        } else if (deliveryOption === 'delivery') {
+            const needed = 35000 - subtotal;
+            if (needed > 0) {
+                deliveryInfo.innerHTML = `<p class="text-orange-600 text-sm">+Rp ${needed.toLocaleString('id-ID')} lagi untuk gratis ongkir</p>`;
+            } else {
+                deliveryInfo.innerHTML = '<p class="text-green-600 text-sm">✓ Gratis ongkir</p>';
+            }
+        }
+    }
+
+    // ========================
+    // 🔹 Checkout
+    // ========================
+    function checkout() {
+        const deliveryOption = document.querySelector('input[name="delivery"]:checked')?.value || 'takeaway';
+
+        fetch('{{ route('cart.checkout') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                delivery_option: deliveryOption
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.snap_token) {
+                // Redirect ke pembayaran Midtrans
+                if (typeof snap !== 'undefined') {
+                    snap.pay(data.snap_token, {
+                        onSuccess: function(result) {
+                            window.location.href = '/orders/' + data.order_id;
+                        },
+                        onPending: function(result) {
+                            window.location.href = '/orders/' + data.order_id;
+                        },
+                        onError: function(result) {
+                            showToast('Pembayaran gagal!', 'bg-red-500');
+                        }
+                    });
+                } else {
+                    // Fallback jika Snap.js tidak tersedia
+                    window.location.href = '/cart/payment?snap_token=' + data.snap_token;
+                }
+            } else {
+                showToast(data.message || 'Checkout gagal', 'bg-red-500');
+            }
+        })
+        .catch(err => {
+            console.error('Error checkout:', err);
+            showToast('Terjadi kesalahan', 'bg-red-500');
+        });
+    }
+
+    // ========================
+    // 🔹 Update badge count
+    // ========================
+    function updateBadges(count) {
+        const cartBadge = document.getElementById('cart-badge');
+        if (cartBadge) {
+            cartBadge.innerText = count;
+            cartBadge.classList.toggle('hidden', count === 0);
+        }
+    }
+
+    // ========================
+    // 🔹 Update count dari server (saat load)
+    // ========================
+    function updateCartCount() {
+        fetch('{{ route('cart.list') }}')
+            .then(res => res.json())
+            .then(data => {
+                updateBadges(data.cart_count || 0);
+                updateCartUI(
+                    data.cart_total || 0,
+                    data.discount_amount || 0,
+                    data.delivery_fee || 0,
+                    data.total_amount || 0,
+                    data.promo_code || null
+                );
+                updateDeliveryInfo(data.cart_total || 0, data.delivery_fee || 0);
+            })
+            .catch(err => console.error('Gagal ambil cart list:', err));
+    }
+
+    // ========================
+    // 🔹 Scroll to cart section
+    // ========================
+    function scrollToCart() {
+        const cartSection = document.querySelector('.lg\\:col-span-1');
+        if (cartSection) {
+            cartSection.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+
+    // ========================
+    // 🔹 Toast helper
+    // ========================
+    function showToast(message, color = 'bg-orange-500') {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        
+        toast.textContent = message;
+        toast.className = `fixed top-5 right-5 z-50 ${color} text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300`;
+        toast.classList.remove('hidden');
+        toast.style.opacity = 1;
+
+        setTimeout(() => {
+            toast.style.opacity = 0;
+            setTimeout(() => toast.classList.add('hidden'), 300);
+        }, 3000);
+    }
+
+    // ========================
+    // 🔹 Toggle cart sidebar
+    // ========================
+    function toggleCartSidebar() {
+        if (typeof Livewire !== 'undefined') {
+            Livewire.dispatch('showCartSidebar');
+        } else {
+            console.warn('Livewire not loaded');
+        }
+    }
+
+    function getLocationHero() {
+        if (!navigator.geolocation) {
+            alert("Browser Anda tidak mendukung Geolocation.");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+
+            const addressBox = document.getElementById("user-address");
+            addressBox.classList.remove("hidden");
+            addressBox.innerText = "Mengambil alamat...";
+
+            // Reverse Geocoding (pakai API Nominatim gratis)
+            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (data.display_name) {
+                    addressBox.innerText = data.display_name;
+                } else {
+                    addressBox.innerText = "Alamat tidak ditemukan.";
+                }
+
+                // SIMPAN ALAMAT DI SESSION via Livewire
+                Livewire.dispatch('userLocationSelected', {
+                    address: data.display_name,
+                    lat: lat,
+                    lon: lon
+                });
+
+            } catch (e) {
+                addressBox.innerText = "Gagal memuat alamat.";
+            }
+
+        }, () => {
+            alert("Izin lokasi ditolak.");
+        });
+    }
+</script> -->
 
 
-
-
-    </script>
 
 @endsection

@@ -32,6 +32,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         'phone',
         'address',
         'role',
+        'fcm_token'
     ];
 
     /**

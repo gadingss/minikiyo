@@ -17,6 +17,8 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DateTimePicker;
+use Illuminate\Support\Facades\Log;
+
 
 // FILAMENT v4 pakai ini:
 use Filament\Actions\EditAction;
@@ -158,6 +160,18 @@ class OrderResource extends Resource
 
                     $user = $record->user;
                     $name = $user?->full_name ?? 'Pelanggan';
+                    $token = $user?->fcm_token; // ambil FCM token dari user
+                    $total = number_format($record->total_amount ?? 0, 0, ',', '.');
+
+                    // 🔔 Kirim notifikasi FCM ke user (jika punya token)
+                    // 🔔 Kirim notifikasi FCM ke user (jika punya token)
+                    Log::info('User FCM Token: ' . ($token ?? 'null'));
+                    if ($token) {
+                        $title = "Pesananmu Sudah Selesai 🎉";
+                        $body = "Halo {$name}, pesanan kamu sudah selesai! Total: Rp {$total}. Terima kasih sudah belanja di Minikiyo Dimsum!";
+                        \App\Helpers\FCMHelper::send($token, $title, $body); // ✅ pakai send()
+                    }
+
                     $phone = $user?->phone;
                     $total = $record->total_amount ?? 0;
 

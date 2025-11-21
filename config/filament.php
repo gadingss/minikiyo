@@ -117,4 +117,26 @@ return [
 
     'system_route_prefix' => 'admin',
 
+    'middleware' => [
+        'auth' => [
+            \Filament\Http\Middleware\Authenticate::class,
+        ],
+
+        'base' => [
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Filament\Http\Middleware\DispatchServingFilamentEvent::class,
+        ],
+    ],
+
+    'auth' => [
+        'guard' => 'web', // biar Filament pakai session guard yang sama dengan login utama Laravel
+        'pages' => [
+            'login' => \Filament\Pages\Auth\Login::class,
+        ],
+    ],
+
+
+
 ];

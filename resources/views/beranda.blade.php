@@ -1,4 +1,4 @@
-@extends('layouts.navigation')
+@extends('layouts.app')
 @section('content')
     <!-- Hero Section -->
     <section class="hero-bg relative overflow-hidden">
@@ -63,18 +63,20 @@
     </section>
 
     <!-- Discount Section -->
+    <!-- Discount Section -->
     <section class="py-8 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6">
                 Diskon Hingga <span class="gradient-text">-40%</span> 🔥 Penawaran Eksklusif Minikiyo Wonton
             </h2>
-            
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- Dimsum Mental -->
-                <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg relative">
+
+            <!-- Scrollable container -->
+            <div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
+                
+                <!-- Dimsum Mentai -->
+                <div class="flex-none w-80 snap-center bg-white rounded-2xl overflow-hidden shadow-lg relative">
                     <div class="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">-40%</div>
                     <img src="{{ asset('images/dimsum_mentai.jpg') }}" alt="Dimsum Mentai" class="w-full h-48 object-cover">
-
                     <div class="p-4">
                         <span class="text-xs text-orange-500 font-medium">RESTORAN</span>
                         <h3 class="font-bold text-lg text-gray-900">Dimsum Mentai</h3>
@@ -82,7 +84,7 @@
                 </div>
 
                 <!-- Wonton -->
-                <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg relative">
+                <div class="flex-none w-80 snap-center bg-white rounded-2xl overflow-hidden shadow-lg relative">
                     <div class="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">-35%</div>
                     <img src="{{ asset('images/wonton.jpg') }}" alt="Wonton" class="w-full h-48 object-cover">
                     <div class="p-4">
@@ -92,7 +94,7 @@
                 </div>
 
                 <!-- Dimsum Goreng -->
-                <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg relative">
+                <div class="flex-none w-80 snap-center bg-white rounded-2xl overflow-hidden shadow-lg relative">
                     <div class="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">-17%</div>
                     <img src="{{ asset('images/dimsum_goreng.jpg') }}" alt="Dimsum Goreng" class="w-full h-48 object-cover">
                     <div class="p-4">
@@ -100,9 +102,40 @@
                         <h3 class="font-bold text-lg text-gray-900">Dimsum Goreng</h3>
                     </div>
                 </div>
+
+                <div class="flex-none w-80 snap-center bg-white rounded-2xl overflow-hidden shadow-lg relative">
+                    <div class="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">-17%</div>
+                    <img src="{{ asset('images/dimsum_goreng.jpg') }}" alt="Dimsum Goreng" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <span class="text-xs text-orange-500 font-medium">RESTORAN</span>
+                        <h3 class="font-bold text-lg text-gray-900">Dimsum Goreng</h3>
+                    </div>
+                </div>
+                <div class="flex-none w-80 snap-center bg-white rounded-2xl overflow-hidden shadow-lg relative">
+                    <div class="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">-17%</div>
+                    <img src="{{ asset('images/dimsum_goreng.jpg') }}" alt="Dimsum Goreng" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <span class="text-xs text-orange-500 font-medium">RESTORAN</span>
+                        <h3 class="font-bold text-lg text-gray-900">Dimsum Goreng</h3>
+                    </div>
+                </div>
+
+                <!-- Tambahkan produk lain di sini -->
             </div>
         </div>
     </section>
+
+    <!-- Hapus scrollbar untuk tampilan lebih clean -->
+    <style>
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    </style>
+
 
     <!-- Popular Menu Section -->
     <section id="menu" class="py-12 bg-gray-50 scroll-mt-20">
@@ -563,102 +596,35 @@
         </button>
     </div>
 
-    <!-- <script>
-        // Simple JavaScript for interactivity
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add smooth scrolling for navigation links
-            const links = document.querySelectorAll('a[href^="#"]');
-            links.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollContainer = document.getElementById('discountScroll');
+            let scrollAmount = 0;
+            let scrollDirection = 1; // 1 = kanan, -1 = kiri
 
-            // Add cart functionality
-            let cartCount = 23;
-            let cartTotal = 1235000;
+            function autoScroll() {
+                if (!scrollContainer) return;
 
-            // Search functionality
-            const searchInput = document.querySelector('input[placeholder="Cari Cita Rasa..."]');
-            const searchButton = document.querySelector('.hero-bg button');
-            
-            searchButton.addEventListener('click', function() {
-                const searchTerm = searchInput.value.trim();
-                if (searchTerm) {
-                    // Simulate search functionality
-                    console.log('Searching for:', searchTerm);
-                    // In a real app, this would trigger a search API call
+                scrollContainer.scrollLeft += scrollDirection;
+
+                // Jika sudah sampai ujung kanan
+                if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth) {
+                    scrollDirection = -1;
                 }
-            });
-
-            // Add to cart simulation
-            const menuItems = document.querySelectorAll('.card-hover');
-            menuItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    // Simulate adding to cart
-                    cartCount++;
-                    cartTotal += Math.floor(Math.random() * 50000) + 25000;
-                    
-                    // Update cart display
-                    const cartCountElement = document.querySelector('.fa-shopping-cart').nextElementSibling;
-                    const cartTotalElement = cartCountElement.nextElementSibling;
-                    
-                    if (cartCountElement) {
-                        cartCountElement.textContent = cartCount;
-                    }
-                    if (cartTotalElement) {
-                        cartTotalElement.textContent = `Rp ${cartTotal.toLocaleString()}`;
-                    }
-
-                    // Show notification
-                    showNotification('Item ditambahkan ke keranjang!');
-                });
-            });
-
-            // Notification system
-            function showNotification(message) {
-                const notification = document.createElement('div');
-                notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full';
-                notification.textContent = message;
-                
-                document.body.appendChild(notification);
-                
-                // Show notification
-                setTimeout(() => {
-                    notification.classList.remove('translate-x-full');
-                }, 100);
-                
-                // Hide notification
-                setTimeout(() => {
-                    notification.classList.add('translate-x-full');
-                    setTimeout(() => {
-                        document.body.removeChild(notification);
-                    }, 300);
-                }, 3000);
+                // Jika sudah sampai ujung kiri
+                else if (scrollContainer.scrollLeft <= 0) {
+                    scrollDirection = 1;
+                }
             }
 
-            // Newsletter subscription
-            const subscribeButton = document.querySelector('button:contains("Subscribe")');
-            if (subscribeButton) {
-                subscribeButton.addEventListener('click', function() {
-                    const emailInput = this.previousElementSibling;
-                    const email = emailInput.value.trim();
-                    
-                    if (email && email.includes('@')) {
-                        showNotification('Berhasil berlangganan newsletter!');
-                        emailInput.value = '';
-                    } else {
-                        showNotification('Masukkan email yang valid!');
-                    }
-                });
-            }
+            // Jalankan setiap 30ms untuk efek halus
+            let interval = setInterval(autoScroll, 30);
+
+            // Hentikan auto scroll saat user interaksi manual
+            scrollContainer.addEventListener('mouseenter', () => clearInterval(interval));
+            scrollContainer.addEventListener('mouseleave', () => interval = setInterval(autoScroll, 30));
+            scrollContainer.addEventListener('touchstart', () => clearInterval(interval));
+            scrollContainer.addEventListener('touchend', () => interval = setInterval(autoScroll, 30));
         });
-    </script> -->
+    </script>
 @endsection

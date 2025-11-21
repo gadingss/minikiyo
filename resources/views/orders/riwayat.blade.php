@@ -1,4 +1,7 @@
-@extends('layouts.navigation')
+<!-- {{ auth()->id() }}
+<pre>{{ print_r($orders->toArray(), true) }}</pre> -->
+
+@extends('layouts.app')
 
 @section('content')
 <section class="py-10 bg-gray-50 min-h-screen">
@@ -7,7 +10,8 @@
             <i class="fas fa-clock text-orange-500"></i> Riwayat Transaksi Saya
         </h1>
 
-        @if($orders->isEmpty())
+        @if(empty($orders))
+
             <div class="text-center bg-white p-10 rounded-xl shadow-sm">
                 <i class="fas fa-box-open text-4xl text-gray-400 mb-4"></i>
                 <p class="text-gray-500">Kamu belum memiliki transaksi.</p>
@@ -25,7 +29,7 @@
                                 Tanggal: {{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, H:i') }}
                             </p>
                             <p class="text-gray-600 text-sm">
-                                Total: <span class="font-bold text-orange-600">Rp {{ number_format($order->total, 0, ',', '.') }}</span>
+                                Total: <span class="font-bold text-orange-600">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>
                             </p>
                             <p class="text-gray-600 text-sm">
                                 Status:

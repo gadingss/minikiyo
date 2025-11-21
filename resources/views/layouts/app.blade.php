@@ -1,74 +1,106 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet">
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-            <!-- Page Content -->
-            <main>
-                @yield('content')
-            </main>
-        </div>
-    </body>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
+
+    <!-- Vite -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Livewire -->
+    @livewireStyles
+</head>
+
+<body class="font-sans antialiased bg-gray-100 dark:bg-gray-900">
+    
+    @include('layouts.navigation')
+
+    @isset($header)
+        <header class="bg-white dark:bg-gray-800 shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {{ $header }}
+            </div>
+        </header>
+    @endisset
+
+    <main>
+        @yield('content')
+    </main>
+
+
+    <!-- ============================= -->
+    <!--   STATIC CART UI UPDATE JS   -->
+    <!-- ============================= -->
     <script>
-    function showCartModal() {
-        fetch('{{ route('cart.list') }}')
-            .then(res => res.json())
-            .then(data => {
-                const cartItemsContainer = document.getElementById('cart-items');
-                const totalEl = document.getElementById('cart-modal-total');
-                
-                if (Object.keys(data.cart).length === 0) {
-                    cartItemsContainer.innerHTML = `<p class="text-center text-gray-500">Keranjang masih kosong</p>`;
-                    totalEl.innerText = 'Rp 0';
+        function updateCartUI(subtotal, discount, deliveryFee, total, promoCode) {
+
+            const elements = {
+                subtotal: document.getElementById('static-cart-subtotal'),
+                discount: document.getElementById('static-cart-discount'),
+                discountRow: document.getElementById('discount-row'),
+                delivery: document.getElementById('static-cart-delivery'),
+                total: document.getElementById('static-cart-total')
+            };
+
+            if (elements.subtotal) {
+                elements.subtotal.textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+            }
+
+            if (elements.discount && elements.discountRow) {
+                if (discount > 0) {
+                    elements.discount.textContent = `-Rp ${discount.toLocaleString('id-ID')}`;
+                    elements.discountRow.classList.remove('hidden');
                 } else {
-                    cartItemsContainer.innerHTML = Object.values(data.cart).map(item => `
-                        <div class="flex justify-between items-center border-b py-2">
-                            <div>
-                                <p class="font-semibold">${item.name}</p>
-                                <p class="text-sm text-gray-500">Qty: ${item.quantity}</p>
-                            </div>
-                            <div class="text-right">
-                                <p>Rp ${(item.unit_price * item.quantity).toLocaleString('id-ID')}</p>
-                            </div>
-                        </div>
-                    `).join('');
-                    totalEl.innerText = 'Rp ' + data.total.toLocaleString('id-ID');
+                    elements.discountRow.classList.add('hidden');
                 }
+            }
 
-                const modal = document.getElementById('cart-modal');
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            })
-            .catch(err => console.error(err));
-    }
+            if (elements.delivery) {
+                elements.delivery.textContent = `Rp ${deliveryFee.toLocaleString('id-ID')}`;
+            }
 
-    function hideCartModal() {
-        const modal = document.getElementById('cart-modal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
+            if (elements.total) {
+                elements.total.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+            }
+        }
     </script>
+
+
+    <!-- =========================== -->
+    <!--   LIVEWIRE GLOBAL EVENTS   -->
+    <!-- =========================== -->
+    @livewireScripts
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // -------------------------------------
+            // LISTENER UNTUK UPDATE BADGE CART
+            // -------------------------------------
+            Livewire.on('updateCartBadge', (data) => {
+                const badge = document.getElementById('cart-badge');
+                if (!badge) return;
+
+                const count = data.count ?? 0;
+
+                badge.textContent = count;
+                badge.classList.toggle('hidden', count === 0);
+            });
+        });
+    </script>
+
+</body>
 </html>
