@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-2xl font-bold mb-6">Keranjang Anda</h1>
 
@@ -89,6 +92,16 @@
                         Rp {{ number_format($summary['subtotal'], 0, ',', '.') }}
                     </span>
                 </div>
+                {{-- NOTE / CATATAN PESANAN --}}
+                @if (!empty($summary['note']))
+                <div class="mb-2">
+                    <p class="text-sm text-gray-600">Catatan Pesanan:</p>
+                    <p class="font-medium text-gray-800 whitespace-pre-line break-words">
+                        {{ $summary['note'] }}
+                    </p>
+                </div>
+                @endif
+
 
                 {{-- TOTAL BAYAR --}}
                 <div class="mt-3 pt-3 border-t flex justify-between font-bold text-orange-600">

@@ -70,6 +70,26 @@
         </div>
     </section>
 
+    @if($recommendedProducts->count())
+    <section class="py-8 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Rekomendasi Untukmu</h2>
+            <div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
+                @foreach($recommendedProducts as $product)
+                <div class="flex-none w-64 snap-center bg-white rounded-2xl overflow-hidden shadow-lg relative">
+                    <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <span class="text-xs text-orange-500 font-medium">RESTORAN</span>
+                        <h3 class="font-bold text-lg text-gray-900">{{ $product->name }}</h3>
+                        <p class="text-sm text-gray-500">Rp {{ number_format($product->price,0,',','.') }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
         <!-- Search & Category Tabs -->
     <section class="bg-white py-6 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

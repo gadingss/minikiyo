@@ -61,6 +61,13 @@ class OrderResource extends Resource
             Forms\Components\Textarea::make('shipping_address')
                 ->label('Alamat Pengiriman'),
 
+            Forms\Components\Textarea::make('note')
+                ->label('Catatan')
+                ->rows(3)
+                ->placeholder('Contoh: Tolong tanpa cabe ya...')
+                ->columnSpanFull(),
+
+
             Repeater::make('items')
                 ->relationship('items') // relasi ke order_items
                 ->schema([
@@ -129,10 +136,27 @@ class OrderResource extends Resource
             Tables\Columns\TextColumn::make('user.full_name')->label('Customer'),
             Tables\Columns\TextColumn::make('user.phone')
                 ->label('No. HP'),
+            Tables\Columns\TextColumn::make('shipping_address')
+                ->label('Alamat Pengiriman')
+                ->wrap()
+                ->limit(50)
+                ->tooltip(fn ($record) => $record->shipping_address), // hover untuk lihat lengkap
+
+ 
+
             Tables\Columns\ViewColumn::make('items')
                 ->label('Produk')
                 ->view('filament.tables.columns.order-products'),
+            Tables\Columns\TextColumn::make('note')
+                ->label('Catatan')
+                ->wrap()
+                ->limit(30)
+                ->tooltip(fn ($record) => $record->note),
             Tables\Columns\TextColumn::make('total_amount')->label('Total')->money('IDR'),
+            Tables\Columns\TextColumn::make('delivery_fee')
+                ->label('Ongkir'),
+            Tables\Columns\TextColumn::make('delivery_option')
+                ->label('Opsi Pengiriman'),
             Tables\Columns\BadgeColumn::make('status')
                 ->colors([
                     'danger'  => 'cancelled',
@@ -142,6 +166,10 @@ class OrderResource extends Resource
                     'success' => 'completed',
                 ]),
             Tables\Columns\TextColumn::make('order_date')->label('Tanggal')->dateTime('d M Y H:i'),
+            Tables\Columns\TextColumn::make('completed_at')
+                ->label('Selesai')
+                ->dateTime('d M Y H:i'),
+
         ])
         ->filters([])
         ->recordActions([
@@ -156,7 +184,10 @@ class OrderResource extends Resource
                 ->requiresConfirmation()
                 ->visible(fn (Order $record) => $record->status !== 'completed') // hanya muncul kalau belum selesai
                 ->action(function (Order $record) {
-                    $record->update(['status' => 'completed']);
+                    $record->update([
+                        'status' => 'completed',
+                        'completed_at' => now(),
+                    ]);
 
                     $user = $record->user;
                     $name = $user?->full_name ?? 'Pelanggan';

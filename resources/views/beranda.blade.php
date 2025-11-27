@@ -62,6 +62,9 @@
         </div>
     </section>
 
+        <!-- Recommended Products / Hero Scrollable -->
+
+
     <!-- Discount Section -->
     <!-- Discount Section -->
     <section class="py-8 bg-white">

@@ -17,6 +17,9 @@ class MenuCartSidebar extends Component
     ];
     public $deliveryOption = 'takeaway';
 
+    public $note = null;
+
+
     public $lat;
     public $lng;
 
@@ -60,6 +63,7 @@ class MenuCartSidebar extends Component
     public function mount()
     {
         $this->deliveryOption = session()->get('delivery_option', 'takeaway');
+        $this->note = session()->get('order_note');
         $this->loadCartData();
     }
 
@@ -141,6 +145,8 @@ class MenuCartSidebar extends Component
 
     private function syncToSession()
     {
+        session()->put('order_note', $this->note);
+
         session()->put('checkout_summary', [
             'address' => session('user_address'),
             'delivery_option' => $this->deliveryOption,
@@ -149,6 +155,7 @@ class MenuCartSidebar extends Component
             'promo_code' => $this->cartSummary['promo_code'],
             'subtotal' => $this->cartSummary['subtotal'],
             'total' => $this->cartSummary['total'],
+            'note' => $this->note,
         ]);
 
         session()->save();
@@ -239,6 +246,17 @@ class MenuCartSidebar extends Component
     {
         $this->loadCartData();
     }
+    public function updatedNote()
+    {
+        $this->syncToSession();
+    }
+    public function goToCart()
+    {
+        $this->syncToSession(); // pastikan Note tersimpan
+        return redirect()->route('cart.index');
+    }
+
+
 
     public function render()
     {

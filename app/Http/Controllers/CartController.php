@@ -13,8 +13,32 @@ class CartController extends Controller
     public function index()
     {
         $cart = session()->get('cart', []);
-        $summary = session()->get('checkout_summary', []);
-        $address = session('user_address');   // ⬅ Tambahan penting
+        $summary = session()->get('checkout_summary');
+        $address = session('user_address');
+
+        // Jika summary belum ada → fallback hitung manual
+        if (!$summary) {
+            $subtotal = array_sum(array_map(fn($item) =>
+                ($item['unit_price'] ?? 0) * ($item['quantity'] ?? 0), $cart
+            ));
+
+            $deliveryOption = session('delivery_option', 'takeaway');
+            $deliveryFee = $deliveryOption === 'takeaway' ? 0 : 10000;
+
+            $summary = [
+                'subtotal' => $subtotal,
+                'discount' => 0,
+                'delivery_fee' => $deliveryFee,
+                'total' => $subtotal + $deliveryFee,
+                'promo_code' => null,
+                'note' => session('order_note')
+            ];
+        }
+        // Inject note dari session agar tampil di keranjang
+        if (!empty(session('order_note'))) {
+            $summary['note'] = session('order_note');
+        }
+
 
         return view('cart.index', compact('cart', 'summary', 'address'));
     }
@@ -123,6 +147,9 @@ class CartController extends Controller
             'shipping_address' => $deliveryOption === 'delivery'
                 ? (session('user_address') ?? Auth::user()->address ?? 'Alamat tidak tersedia')
                 : null,
+            'note' => session('order_note') ?? ($summary['note'] ?? null),
+
+
 
         ]);
 
