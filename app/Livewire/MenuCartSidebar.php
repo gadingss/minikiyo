@@ -184,10 +184,69 @@ class MenuCartSidebar extends Component
 
     private function calculateDiscount($subtotal)
     {
-        return session('promo_code') === 'DISKON10'
-            ? $subtotal * 0.1
-            : 0;
+        $promo = session('promo_code');
+
+        if (!$promo) return 0;
+
+        $promoModel = \App\Models\PromoCode::where('code', $promo)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$promoModel) return 0;
+
+        if ($promoModel->type === 'percentage') {
+            return $subtotal * ($promoModel->value / 100);
+        }
+
+        if ($promoModel->type === 'fixed') {
+            return min($subtotal, $promoModel->value); // jangan minus
+        }
+
+        return 0;
     }
+
+    public $promoCodeInput = null;
+
+    public function applyPromoCode()
+    {
+        $promo = $this->promoCodeInput ?: session('promo_code');
+
+
+        if (!$promo) {
+            session()->forget('promo_code');
+            $this->calculateSummary();
+            $this->syncToSession();
+            return;
+        }
+
+        $promoModel = \App\Models\PromoCode::where('code', $promo)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$promoModel) {
+            session()->forget('promo_code');
+            $this->calculateSummary();
+            $this->syncToSession();
+            return;
+        }
+
+        session()->put('promo_code', $promoModel->code);
+        session()->save();
+
+        $this->calculateSummary();
+        $this->syncToSession();
+    }
+
+
+    public function removePromoCode()
+    {
+        session()->forget('promo_code');
+        session()->save();
+
+        $this->calculateSummary();
+        $this->syncToSession();
+    }
+
 
     public function open()
     {

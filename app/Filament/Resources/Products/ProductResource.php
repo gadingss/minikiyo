@@ -79,6 +79,7 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('image_url')
                     ->label('Gambar')
+                    ->disk('public')
                     ->square(),
 
                 Tables\Columns\TextColumn::make('id')->sortable(),

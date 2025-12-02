@@ -15,6 +15,7 @@ use BackedEnum;
 
 class SalesReportPage extends Page implements Tables\Contracts\HasTable
 {
+
     use Tables\Concerns\InteractsWithTable;
 
     protected static ?string $navigationLabel = 'Sales Report';
@@ -47,9 +48,11 @@ class SalesReportPage extends Page implements Tables\Contracts\HasTable
                 ->query(function ($query, $state) {
                     if ($state === 'week') {
                         return $query->whereBetween('orders.created_at', [
-                            Carbon::now()->startOfWeek(),
-                            Carbon::now()->endOfWeek(),
+                            Carbon::now()->startOfWeek(Carbon::MONDAY),
+                            Carbon::now()->endOfWeek(Carbon::SUNDAY),
+
                         ]);
+                        
                     }
 
                     if ($state === 'month') {

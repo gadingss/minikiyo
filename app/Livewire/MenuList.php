@@ -34,18 +34,23 @@ class MenuList extends Component
             $menus = collect([$this->category => $menus[$this->category]]);
         }
 
-        $menus = $menus->map(function ($items) {
-            return collect($items)->filter(function ($item) {
-                return str_contains(
-                    strtolower($item['name']),
-                    strtolower($this->search)
-                );
+        $menus = $menus
+            ->map(function ($items) {
+                return collect($items)->filter(function ($item) {
+                    return str_contains(
+                        strtolower($item['name']),
+                        strtolower($this->search)
+                    );
+                });
+            })
+            ->filter(function ($items) {
+                return $items->isNotEmpty(); // HAPUS KATEGORI YANG KOSONG
             });
-        });
 
         return view('livewire.menu-list', [
             'menus' => $menus,
         ]);
     }
+
 }
 

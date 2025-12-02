@@ -100,9 +100,25 @@ class MidtransController extends Controller
                     $product->stock_quantity -= $item->quantity; 
                     $product->save();
                 }
+                
             }
 
             Log::info("Stok produk untuk Order {$order->id} berhasil dikurangi");
+
+            if (!$order->promo_applied && $order->promo_code) {
+
+                $promo = \App\Models\PromoCode::where('code', $order->promo_code)->first();
+
+                if ($promo) {
+                    $promo->used_count += 1;
+                    $promo->save();
+                    Log::info("Promo {$promo->code} used_count incremented");
+                }
+
+                // tandai sudah dipakai agar tidak double
+                $order->promo_applied = true;
+                $order->save();
+            }
         }
 
 

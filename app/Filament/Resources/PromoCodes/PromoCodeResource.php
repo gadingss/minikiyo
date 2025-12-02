@@ -1,15 +1,24 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\PromoCodes;
 
-use App\Filament\Resources\PromoCodeResource\Pages;
-use App\Filament\Resources\PromoCodeResource\RelationManagers;
+use App\Filament\Resources\PromoCodes\Pages;
+// use App\Filament\Resources\PromoCodeResource\RelationManagers;
 use App\Models\PromoCode;
 use Filament\Forms;
 use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\Action;
+
+use Filament\Schemas\Components\Section;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use BackedEnum;
@@ -30,7 +39,7 @@ class PromoCodeResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-                Forms\Components\Section::make('Informasi Promo Code')
+                Section::make('Informasi Promo Code')
                     ->schema([
                         Forms\Components\TextInput::make('code')
                             ->required()
@@ -49,7 +58,7 @@ class PromoCodeResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Pengaturan Diskon')
+                Section::make('Pengaturan Diskon')
                     ->schema([
                         Forms\Components\Select::make('type')
                             ->required()
@@ -91,7 +100,7 @@ class PromoCodeResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Batas Penggunaan')
+                Section::make('Batas Penggunaan')
                     ->schema([
                         Forms\Components\TextInput::make('usage_limit')
                             ->numeric()
@@ -231,7 +240,7 @@ class PromoCodeResource extends Resource
                     ->label('Status Aktif'),
             ])
             ->actions([
-                Tables\Actions\Action::make('view_usage')
+                ViewAction::make('view_usage')
                     ->icon('heroicon-o-eye')
                     ->label('')
                     ->tooltip('Lihat Detail Penggunaan')
@@ -243,9 +252,9 @@ class PromoCodeResource extends Resource
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel('Tutup'),
 
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
 
-                Tables\Actions\Action::make('duplicate')
+                Action::make('duplicate')
                     ->icon('heroicon-o-document-duplicate')
                     ->label('')
                     ->tooltip('Duplicate Promo Code')
@@ -262,18 +271,17 @@ class PromoCodeResource extends Resource
                     ->modalDescription('Apakah Anda yakin ingin menduplikat promo code ini?')
                     ->modalSubmitActionLabel('Ya, Duplicate'),
 
-                Tables\Actions\DeleteAction::make(),
+                DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                DeleteBulkAction::make(),
+                
             ])
             ->defaultSort('created_at', 'desc')
             ->emptyStateHeading('Belum ada promo code')
             ->emptyStateDescription('Buat promo code pertama Anda untuk menarik lebih banyak customer.')
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->label('Buat Promo Code')
                     ->icon('heroicon-o-plus'),
             ]);

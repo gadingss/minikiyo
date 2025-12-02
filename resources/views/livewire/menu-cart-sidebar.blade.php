@@ -194,7 +194,7 @@
                     <textarea
                         wire:model="note"
                         rows="2"
-                        placeholder="Contoh: tanpa cabe / sambal banyak / pisah ya"
+                        placeholder="Contoh: Saya ambil jam 7 malam."
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                     ></textarea>
                 </div>

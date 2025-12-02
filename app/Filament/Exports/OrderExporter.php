@@ -14,37 +14,41 @@ class OrderExporter extends Exporter
 {
     protected static ?string $model = Order::class;
 
-    public static function beforeExport($file, $export)
+    public static function modifySpreadsheet(\PhpOffice\PhpSpreadsheet\Spreadsheet $spreadsheet): void
     {
-        parent::beforeExport($file, $export);
+        $sheet = $spreadsheet->getActiveSheet();
 
-        // Ambil spreadsheet
-        $sheet = $file->getActiveSheet();
+        // Sisipkan 4 baris kosong agar header Filament tidak menimpa judul
+        $sheet->insertNewRowBefore(1, 4);
 
-        // Tambah judul
+        // --- JUDUL ---
         $sheet->setCellValue('A1', 'LAPORAN PENJUALAN MINIKIYOKU');
         $sheet->mergeCells('A1:G1');
-        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
-        // Subjudul Tanggal
+        // Tanggal
         $sheet->setCellValue('A2', 'Tanggal Export: ' . now()->format('d-m-Y H:i'));
         $sheet->mergeCells('A2:G2');
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
 
-        // HEADER MANUAL (di baris 3)
+        // Header manual
         $headers = ['Order ID', 'Customer', 'Product', 'Qty', 'Total', 'Status', 'Tanggal Order'];
         $col = 'A';
 
         foreach ($headers as $header) {
             $sheet->setCellValue($col . '3', $header);
-            $sheet->getStyle($col . '3')->getFont()->setBold(true);
             $col++;
         }
 
-        // Mulai data dari baris 4
-        $export->startRow = 4;
+        // Bold header baris 3
+        $sheet->getStyle('A3:G3')->getFont()->setBold(true);
+
+        // Paksa pointer menulis data mulai baris 4
+        $sheet->setSelectedCell('A4');
     }
+
+
 
 
 
