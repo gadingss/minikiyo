@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(LoginResponseContract::class, LoginResponse::class);
 
         // ✅ Paksa semua URL jadi HTTPS jika pakai ngrok (atau hosting dengan HTTPS)
-        if (config('app.env') === 'local' && str_contains(config('app.url'), 'https://')) {
+        if (config('app.env') === 'production') {
             URL::forceScheme('https');
         }
     }

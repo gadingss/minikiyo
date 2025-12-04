@@ -14,8 +14,8 @@
             <nav class="hidden lg:flex items-center space-x-6">
                 <x-nav-link href="{{ route('beranda') }}" :active="request()->routeIs('beranda')">Beranda</x-nav-link>
                 <x-nav-link href="{{ route('menu') }}" :active="request()->routeIs('menu')">Menu</x-nav-link>
-                <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">Order</x-nav-link>
-                <x-nav-link href="{{ route('orders.riwayat') }}" :active="request()->routeIs('orders.riwayat')">Riwayat</x-nav-link>
+                <!-- <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">Order</x-nav-link> -->
+                <x-nav-link href="{{ route('orders.riwayat') }}" :active="request()->routeIs('orders.riwayat')">Pesanan</x-nav-link>
                 <x-nav-link href="{{ route('kontak') }}" :active="request()->routeIs('kontak')">Kontak</x-nav-link>
                 <x-nav-link href="{{ route('lokasi') }}" :active="request()->routeIs('lokasi')">Lokasi</x-nav-link>
             </nav>

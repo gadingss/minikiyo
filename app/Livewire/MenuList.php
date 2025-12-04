@@ -9,6 +9,7 @@ class MenuList extends Component
     public $search = '';
     public $category = 'all';
     public $menuData;
+    
 
     public function mount($menuData)
     {
@@ -21,36 +22,49 @@ class MenuList extends Component
     }
 
 
-    public function setCategory($cat)
+    public function setCategory($category)
     {
-        $this->category = $cat;
+        $this->category = $category;
     }
+
 
     public function render()
     {
         $menus = collect($this->menuData);
 
-        if ($this->category !== 'all') {
-            $menus = collect([$this->category => $menus[$this->category]]);
+        // 1️⃣ Filter search DULU
+        if (!empty($this->search)) {
+            $search = strtolower($this->search);
+
+            $menus = $menus
+                ->map(function ($items) use ($search) {
+                    return collect($items)->filter(function ($item) use ($search) {
+                        return str_contains(
+                            strtolower($item['name']),
+                            $search
+                        );
+                    });
+                })
+                ->filter(fn($items) => $items->isNotEmpty());
         }
 
-        $menus = $menus
-            ->map(function ($items) {
-                return collect($items)->filter(function ($item) {
-                    return str_contains(
-                        strtolower($item['name']),
-                        strtolower($this->search)
-                    );
-                });
-            })
-            ->filter(function ($items) {
-                return $items->isNotEmpty(); // HAPUS KATEGORI YANG KOSONG
-            });
+        // 2️⃣ Filter kategori SETELAH search
+        if ($this->category !== 'all') {
+            $menus = collect([
+                $this->category => $menus[$this->category] ?? []
+            ]);
+        }
 
         return view('livewire.menu-list', [
             'menus' => $menus,
         ]);
     }
+
+
+
+
+
+
 
 }
 

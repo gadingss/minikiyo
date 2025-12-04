@@ -19,9 +19,18 @@ class OrderController extends Controller
 
     public function riwayat()
     {
-        $orders = Order::where('user_id', auth()->id())->latest()->get();
-        return view('orders.riwayat', compact('orders'));
+        $status = request('status'); // ambil ?status= dari URL
+
+        $orders = Order::where('user_id', auth()->id())
+            ->when($status, function ($query) use ($status) {
+                return $query->where('status', $status);
+            })
+            ->latest()
+            ->get();
+
+        return view('orders.riwayat', compact('orders', 'status'));
     }
+
 
     public function show($id)
     {

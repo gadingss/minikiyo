@@ -2,7 +2,8 @@
     {{-- Search --}}
     <input 
         type="text" 
-        wire:model.debounce.300ms="search"
+        wire:model.live.debounce.300ms="search"
+
         placeholder="Cari menu..."
         class="border p-2 rounded w-full"
     />

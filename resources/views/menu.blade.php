@@ -90,32 +90,7 @@
     </section>
     @endif
 
-        <!-- Search & Category Tabs -->
-    <section class="bg-white py-6 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                <h2 class="text-2xl font-bold text-gray-900">
-                    Semua Penawaran dari <span class="text-orange-500">Minikiyo Wonton</span>
-                </h2>
-                <div class="flex bg-gray-100 rounded-full p-1 w-full md:w-auto md:min-w-[300px]">
-                    <input type="text" id="search-menu" placeholder="Cari menu..." class="flex-1 px-4 py-2 bg-transparent outline-none">
-                    <button onclick="searchMenu()" class="bg-orange-500 hover:bg-orange-600 text-white p-2 rounded-full">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
 
-            <!-- Category Buttons (auto dari $menuData) -->
-            <div class="flex space-x-2 mt-6 overflow-x-auto">
-                <button onclick="filterCategory('all')" class="category-tab category-active px-6 py-3 rounded-full font-medium">Semua</button>
-                @foreach($menuData as $category => $items)
-                    <button onclick="filterCategory('{{ $category }}')" class="category-tab category-inactive px-6 py-3 rounded-full font-medium">
-                        {{ ucfirst($category) }}
-                    </button>
-                @endforeach
-            </div>
-        </div>
-    </section>
 
     <!-- Promotional Banners -->
     <!-- <section class="py-8 bg-gray-50">

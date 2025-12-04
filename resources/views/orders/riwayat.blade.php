@@ -20,9 +20,31 @@
                 </a>
             </div>
         @else
+            <div class="mb-4 flex gap-2">
+                <a href="{{ route('orders.riwayat') }}"
+                class="px-3 py-1 rounded {{ $status ? 'bg-gray-200' : 'bg-blue-500 text-white' }}">
+                Semua
+                </a>
+
+                <a href="{{ route('orders.riwayat', ['status' => 'pending']) }}"
+                class="px-3 py-1 rounded {{ $status == 'pending' ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
+                Pending
+                </a>
+
+                <a href="{{ route('orders.riwayat', ['status' => 'completed']) }}"
+                class="px-3 py-1 rounded {{ $status == 'completed' ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
+                Selesai
+                </a>
+
+                <a href="{{ route('orders.riwayat', ['status' => 'dibatalkan']) }}"
+                class="px-3 py-1 rounded {{ $status == 'dibatalkan' ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
+                Dibatalkan
+                </a>
+            </div>
+
             <div class="space-y-4">
                 @foreach($orders as $order)
-                    <div class="bg-white rounded-xl shadow-sm p-6 flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div x-data="{ open: false }" class="bg-white rounded-xl shadow-sm p-6 flex flex-col md:flex-row justify-between items-start md:items-center">
                         <div>
                             <h2 class="font-semibold text-lg text-gray-900">Pesanan #{{ $order->id }}</h2>
                             <p class="text-gray-600 text-sm mt-1">
@@ -50,20 +72,62 @@
                         </div>
 
                         <div class="mt-4 md:mt-0 flex flex-wrap gap-3">
-                            <a href="{{ route('orders.show', $order->id) }}" 
-                               class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition">
+                            <button @click="open = true"
+                                class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition">
                                 <i class="fas fa-eye mr-2"></i>Detail
-                            </a>
+                            </button>
 
                             @if($order->status === 'pending')
                                 <a href="{{ route('orders.cancel', $order->id) }}" 
-                                   class="bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200 transition">
+                                class="bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200 transition">
                                     <i class="fas fa-times mr-2"></i>Batalkan
                                 </a>
                             @endif
                         </div>
+
+                        <!-- MODAL POPUP -->
+                        <div x-show="open" 
+                            class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+                            x-transition>
+                            <div class="bg-white w-full max-w-md p-6 rounded-xl shadow-lg relative">
+
+                                <!-- Tombol close -->
+                                <button class="absolute top-2 right-3 text-gray-500 hover:text-gray-700"
+                                        @click="open = false">&times;</button>
+
+                                <h3 class="text-xl font-semibold mb-4">Detail Pesanan #{{ $order->id }}</h3>
+
+                                <p><strong>Status:</strong> {{ ucfirst($order->status) }}</p>
+                                <p><strong>Total:</strong> Rp {{ number_format($order->total_amount, 0, ',', '.') }}</p>
+
+                                @if($order->shipping_address)
+                                    <p class="mt-1"><strong>Alamat:</strong> {{ $order->shipping_address }}</p>
+                                @endif
+
+                                <h4 class="font-semibold mt-4 mb-2">Daftar Item:</h4>
+                                <ul class="list-disc ml-5 text-sm">
+                                    @foreach($order->items as $item)
+                                        <li>
+                                            {{ $item->product_name }} ({{ $item->quantity }}x) — 
+                                            Rp {{ number_format($item->subtotal, 0, ',', '.') }}
+                                        </li>
+                                    @endforeach
+                                
+                                    @if($order->discount_amount > 0)
+                                        <li><strong>Diskon:</strong> -Rp {{ number_format($order->discount_amount, 0, ',', '.') }}</li>
+                                    @endif
+
+                                    @if($order->delivery_fee > 0)
+                                        <li><strong>Ongkir:</strong> Rp {{ number_format($order->delivery_fee, 0, ',', '.') }}</li>
+                                    @endif
+                                </ul>
+
+                            </div>
+                        </div>
+                        <!-- END MODAL -->
                     </div>
                 @endforeach
+
             </div>
         @endif
     </div>
